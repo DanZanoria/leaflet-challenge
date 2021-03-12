@@ -1,51 +1,18 @@
 // The Basis of this code will base on Citi Bike Actiovity and the City Population Actitvity
-
-// Create the tile layer that will be the background of our map
-var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-  attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-  maxZoom: 18,
-  id: "light-v10",
-  accessToken: API_KEY
-});
-
-console.log(lightmap)
-
-
-// Initialize all of the LayerGroups we'll be using
-var layers = {
-    Techtonic_Plates: new L.LayerGroup(),
-    Earthquake: new L.LayerGroup(),
-  };
-
-  // Create the map with our layers
-var map = L.map("map-id", {
-    center: [40.73, -74.0059],
-    zoom: 12,
-    layers: [
-      layers.Techtonic_Plates,
-      layers.Earthquake,
-    ]
+//  Create the map with our layers
+// Create the createMap function
+var myMap = L.map("mapid", {
+    center: [37.77986, -122.42905],
+    zoom: 10
   });
 
-  // Add our 'lightmap' tile layer to the map
-lightmap.addTo(map);
-
-
-// Create an overlays object to add to the layer control
-var overlays = {
-    "Earthquale": layers.Earthquake,
-    "Techtonic Plates": layers.Techtonic_Plates
-  };
-
-  // Create a control for our layers, add our overlay layers to it
-L.control.layers(null, overlays).addTo(map);
-
-
-// When the layer control is added, insert a div with the class of "legend"
-info.onAdd = function() {
-    var div = L.DomUtil.create("div", "legend");
-    return div;
-  };
-
-  // Add the info legend to the map
-info.addTo(map);
+  
+// Adding tile layer to the map
+L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+  attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+  tileSize: 512,
+  maxZoom: 18,
+  zoomOffset: -1,
+  id: "mapbox/streets-v11",
+  accessToken: API_KEY
+}).addTo(myMap);
