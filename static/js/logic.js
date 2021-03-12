@@ -29,3 +29,23 @@ var map = L.map("map-id", {
 
   // Add our 'lightmap' tile layer to the map
 lightmap.addTo(map);
+
+
+// Create an overlays object to add to the layer control
+var overlays = {
+    "Earthquale": layers.Earthquake,
+    "Techtonic Plates": layers.Techtonic_Plates
+  };
+
+  // Create a control for our layers, add our overlay layers to it
+L.control.layers(null, overlays).addTo(map);
+
+
+// When the layer control is added, insert a div with the class of "legend"
+info.onAdd = function() {
+    var div = L.DomUtil.create("div", "legend");
+    return div;
+  };
+
+  // Add the info legend to the map
+info.addTo(map);
