@@ -1,3 +1,5 @@
+// Most of this Code is Base Day Activity 10
+
 // Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
@@ -13,13 +15,47 @@ function createFeatures(earthquakeData) {
   // Give each feature a popup describing the place and time of the earthquake
   function onEachFeature(feature, layer) {
     layer.bindPopup("<h3>" + feature.properties.place +
-      "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+      "</h3><hr><p>" + new Date(feature.properties.time) + "</p>" + "<h4> Magnitude: " + feature.properties.mag +"</h4>");
   }
 
+
+// Function for Circle Color Base on Criteria. The Color Scale is base of the 7 colors of a Rainboy ROY G BIV
+function QuakeColor(Qcolor) {
+    switch(true) {
+        case (0 <= Qcolor && Qcolor <= 1.0):
+          return "Red";
+        case (1.0 <= Qcolor && Qcolor <= 2.0):
+            return "Orange";
+        case (2.0 <= Qcolor && Qcolor<= 3.0):
+          return "Yellow";
+        case (3.0 <= Qcolor && Qcolor<= 4.0):
+            return "Green";
+        case (4.0 <= Qcolor && Qcolor<= 5.0):
+            return "Blue";
+        case (5.0 <= Qcolor && Qcolor <= 6.0):
+          return "Indigo";
+        default:
+          return "Violet";
+    }
+  }
+//   Create a circle function
+
+function CircleMaker(features, latlng){
+    var CircleOptions = {
+        radius: features.properties.mag * 8,
+        fillColor: QuakeColor(features.properties.mag),
+        color: QuakeColor(features.properties.mag),
+        opacity: 1.0,
+        fillOpacity: .5
+
+    }
+    return L.circleMarker(latlng, CircleOptions)
+}
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
   var earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature
+    onEachFeature: onEachFeature,
+    pointToLayer: CircleMaker
   });
 
   // Sending our earthquakes layer to the createMap function
@@ -74,6 +110,13 @@ function createMap(earthquakes) {
     zoom: 5,
     layers: [streetmap, earthquakes]
   });
+
+// Create a legend to display information about our map
+var info = L.control({
+    position: "bottomright"
+  });
+// Add the info legend to the map
+info.addTo(myMap);
 
   // Create a layer control
   // Pass in our baseMaps and overlayMaps
